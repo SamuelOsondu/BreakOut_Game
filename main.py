@@ -4,6 +4,7 @@ from random import randint
 blocks = []
 
 
+# Creating the blocks in the game and arranging them.
 def pack_blocks():
     for x_position in range(-350, 380, 100):
         for y_position in range(120, 260, 20):
@@ -18,8 +19,9 @@ def pack_blocks():
             block.color(r, b, g)
             block.goto(x_position, y_position)
             blocks.append(block)
+            
 
-
+# Creating the Player in the game with its movement abilities.
 class Player(Turtle):
     def __init__(self):
         super().__init__()
@@ -41,6 +43,7 @@ class Player(Turtle):
         screen.update()
 
 
+# Creating the Ball in the game with its bouncing abilities.
 class Ball(Turtle):
     def __init__(self):
         super().__init__()
@@ -50,7 +53,6 @@ class Ball(Turtle):
 
         self.x_move = 2
         self.y_move = 2
-
 
     def move(self):
         new_x = self.xcor() + self.x_move
@@ -68,6 +70,7 @@ class Ball(Turtle):
         self.bounce_x()
 
 
+# Creating the Scoreboard in the game.
 class Scoreboard(Turtle):
 
     def __init__(self):
@@ -83,12 +86,12 @@ class Scoreboard(Turtle):
         self.goto(0, 260)
         self.write(self.score, align="center", font=("Courier", 20, "normal"))
 
-
     def scored(self):
-        self.score += 1
+        self.score += 5
         self.update_scoreboard()
 
 
+# Setting up the screen and creating an object of all classes
 screen = Screen()
 screen.bgcolor("black")
 screen.setup(width=800, height=600)
@@ -104,7 +107,7 @@ screen.listen()
 screen.onkeypress(player.go_right, "Left")
 screen.onkeypress(player.go_left, "Right")
 
-
+# Making the game run
 game_is_on = True
 while game_is_on:
     screen.update()
@@ -125,13 +128,13 @@ while game_is_on:
     if ball.distance(player) < 100 and ball.ycor() == -180:
         ball.bounce_y()
 
+    # Removing any block that's hit and increasing the score.
     for each_block in blocks:
         if ball.distance(each_block) < 20:
+            blocks.remove(each_block)
             each_block.hideturtle()
-            each_block = 0
             ball.bounce_y()
             scoreboard.scored()
 
 
 screen.exitonclick()
-
